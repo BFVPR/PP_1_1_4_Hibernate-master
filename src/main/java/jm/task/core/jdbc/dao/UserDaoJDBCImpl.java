@@ -9,11 +9,11 @@ import java.util.List;
 
 public class UserDaoJDBCImpl implements UserDao {
 
-    private static final String CREATE_TABLE = "CREATE TABLE IF NOT EXISTS User (Id BIGINT PRIMARY KEY AUTO_INCREMENT, Name VARCHAR(30), LastName VARCHAR(30), Age TINYINT)";
+    private static final String CREATE_TABLE = "CREATE TABLE IF NOT EXISTS User (id BIGINT PRIMARY KEY AUTO_INCREMENT, name VARCHAR(30), last_name VARCHAR(30), age TINYINT)";
     private static final String DROP_TABLE = "DROP TABLE User";
-    private static final String INSERT_SQL = "INSERT INTO User (NAME, LASTNAME, AGE) VALUES (?,?,?)";
+    private static final String INSERT_SQL = "INSERT INTO User (name, last_name, age) VALUES (?,?,?)";
 
-    private static final String DELETE_SQL_BY_ID = "DELETE FROM User WHERE Id = ?";
+    private static final String DELETE_SQL_BY_ID = "DELETE FROM User WHERE id = ?";
     private static final String SELECT_SQL = "select * from User";
     private static final String DELETE_SQL = "DELETE from User";
 
@@ -66,7 +66,7 @@ public class UserDaoJDBCImpl implements UserDao {
             List<User> list = new ArrayList<>();
             while (resultSet.next()) {
                 User user = new User(resultSet.getString("name"),
-                        resultSet.getString("lastname"),
+                        resultSet.getString("last_name"),
                         resultSet.getByte("age"));
                 user.setId(resultSet.getLong("id"));
                 list.add(user);
