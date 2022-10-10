@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class UserDaoJDBCImpl implements UserDao {
-    private static volatile UserDaoJDBCImpl INSTANCE;
+
     private static final String CREATE_TABLE = "CREATE TABLE IF NOT EXISTS User (Id BIGINT PRIMARY KEY AUTO_INCREMENT, Name VARCHAR(30), LastName VARCHAR(30), Age TINYINT)";
     private static final String DROP_TABLE = "DROP TABLE User";
     private static final String INSERT_SQL = "INSERT INTO User (NAME, LASTNAME, AGE) VALUES (?,?,?)";
@@ -17,22 +17,10 @@ public class UserDaoJDBCImpl implements UserDao {
     private static final String SELECT_SQL = "select * from User";
     private static final String DELETE_SQL = "DELETE from User";
 
-    private UserDaoJDBCImpl() {
+    public UserDaoJDBCImpl() {
 
     }
 
-    public static UserDaoJDBCImpl getInstance() {
-        UserDaoJDBCImpl localInstance = INSTANCE;
-        if (localInstance == null) {
-            synchronized (UserDaoJDBCImpl.class) {
-                localInstance = INSTANCE;
-                if (localInstance == null) {
-                    INSTANCE = localInstance = new UserDaoJDBCImpl();
-                }
-            }
-        }
-        return localInstance;
-    }
 
     public void createUsersTable() {
         try (Connection connection = Util.getConnection(); Statement statement = connection.createStatement()) {
@@ -42,7 +30,6 @@ public class UserDaoJDBCImpl implements UserDao {
         }
     }
 
-    //+
     public void dropUsersTable() {
         try (Connection connection = Util.getConnection(); Statement statement = connection.createStatement()) {
             statement.executeUpdate(DROP_TABLE);
@@ -73,17 +60,15 @@ public class UserDaoJDBCImpl implements UserDao {
         }
     }
 
-    // tut id null Norm?
     public List<User> getAllUsers() {
         try (Connection connection = Util.getConnection(); Statement statement = connection.createStatement()) {
             ResultSet resultSet = statement.executeQuery(SELECT_SQL);
             List<User> list = new ArrayList<>();
             while (resultSet.next()) {
-                Long id = resultSet.getLong("id");
-                String name = resultSet.getString("name");
-                String lastName = resultSet.getString("lastname");
-                Byte age = resultSet.getByte("age");
-                User user = new User(name, lastName, age);
+                User user = new User(resultSet.getString("name"),
+                        resultSet.getString("lastname"),
+                        resultSet.getByte("age"));
+                user.setId(resultSet.getLong("id"));
                 list.add(user);
             }
             return list;
