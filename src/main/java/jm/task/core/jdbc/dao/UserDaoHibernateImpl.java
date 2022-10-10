@@ -18,8 +18,8 @@ public class UserDaoHibernateImpl implements UserDao {
 
     @Override
     public void createUsersTable() {
-        try (SessionFactory factory = new Configuration().configure().addAnnotatedClass(User.class).buildSessionFactory();
-             Session session = factory.getCurrentSession();) {
+        try (SessionFactory factory = new Configuration().configure().buildSessionFactory();
+             Session session = factory.openSession();) {
             session.beginTransaction();
             session.createSQLQuery(CREATE_TABLE).addEntity(User.class);
             session.getTransaction().commit();
