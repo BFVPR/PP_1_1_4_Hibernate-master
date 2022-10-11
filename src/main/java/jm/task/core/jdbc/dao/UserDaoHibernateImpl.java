@@ -9,7 +9,7 @@ import java.util.List;
 
 public class UserDaoHibernateImpl implements UserDao {
     private static final String CREATE_TABLE = "CREATE TABLE IF NOT EXISTS User (id BIGINT PRIMARY KEY AUTO_INCREMENT, name VARCHAR(30), last_name VARCHAR(30), age TINYINT)";
-    private static final String DROP_TABLE = "DROP TABLE User";
+    private static final String DROP_TABLE = "DROP TABLE IF EXISTS User";
 
     public UserDaoHibernateImpl() {
 
